@@ -10,19 +10,12 @@
   <name>tutorial</name>
   <url>http://maven.apache.org</url>
 
-   <properties>
+  <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- use the latest snapshot -->
-        <geotools.version>15-SNAPSHOT</geotools.version>
+        <geotools.version>13.2</geotools.version>
     </properties>
 
-   <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
-            <scope>test</scope>
-        </dependency>
+    <dependencies>
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-shapefile</artifactId>
@@ -33,7 +26,27 @@
             <artifactId>gt-swing</artifactId>
             <version>${geotools.version}</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-hsql</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geotiff</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-image</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-wms</artifactId>
+            <version>${geotools.version}</version>
+        </dependency>
+      </dependencies>
     
      <repositories>
         <repository>
