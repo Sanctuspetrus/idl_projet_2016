@@ -102,11 +102,11 @@ public class Quickstart {
 	 */
 	public static void main(String[] args) throws Exception {
 		// display a data store file chooser dialog for shapefiles
-		File file = new File("cartes/timezone.shp");
-		File file2 = new File("cartes/countries.shp");
+		File file = new File("cartes/countries.shp");
+		File file2 = new File("cartes/timezone.shp");
 		File barb = new File("cartes/barbulle.jpg");
 
-		AbstractGridFormat format = GridFormatFinder.findFormat( barb );        
+		AbstractGridFormat format = GridFormatFinder.findFormat( barb );
         reader = format.getReader(barb);
         // Initially display the raster in greyscale using the
         // data from the first image band
@@ -132,8 +132,8 @@ public class Quickstart {
         // Set up a MapContent with the two layers
         final MapContent map = new MapContent();
         map.setTitle("ImageLab");
-        map.addLayer(shpLayer);
         map.addLayer(rasterLayer);
+        map.addLayer(shpLayer);
         map.addLayer(shpLayer2);
 
 		// Now display the map
