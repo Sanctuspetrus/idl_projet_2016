@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-import org.geotools.coverage.GridSampleDimension;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
@@ -15,8 +14,8 @@ import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.geometry.DirectPosition2D;
 import org.geotools.map.FeatureLayer;
-import org.geotools.map.GridReaderLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.styling.ChannelSelection;
@@ -28,6 +27,8 @@ import org.geotools.styling.Style;
 import org.geotools.styling.StyleFactory;
 import org.geotools.swing.JMapFrame;
 import org.opengis.filter.FilterFactory2;
+import org.opengis.geometry.DirectPosition;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.style.ContrastMethod;
 
 /**
@@ -105,13 +106,6 @@ public class Quickstart {
 		File file = new File("cartes/countries.shp");
 		File file2 = new File("cartes/timezone.shp");
 		File barb = new File("cartes/barbulle.jpg");
-
-		AbstractGridFormat format = GridFormatFinder.findFormat( barb );
-        reader = format.getReader(barb);
-        // Initially display the raster in greyscale using the
-        // data from the first image band
-        Style rasterStyle = createGreyscaleStyle(1);
-        Layer rasterLayer = new GridReaderLayer(reader, rasterStyle);
         
         // Connect to the shapefile
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(file);
@@ -128,6 +122,18 @@ public class Quickstart {
         Style shpStyle2 = SLD.createPolygonStyle(Color.black, null, 0.0f);
         Layer shpLayer2 = new FeatureLayer(shapefileSource2, shpStyle2);
        
+        
+        AbstractGridFormat format = GridFormatFinder.findFormat( barb );
+        reader = format.getReader(barb);
+        GridCoverage2D coverage = reader.read(null);
+        CoordinateReferenceSystem crs = coverage.getCoordinateReferenceSystem2D();
+        // direct access
+        DirectPosition position = new DirectPosition2D(crs, 24, 35);
+        coverage.evaluate( position ); // assume double
+        // Initially display the raster in greyscale using the
+        // data from the first image band
+        Style rasterStyle = createGreyscaleStyle(1);
+        Layer rasterLayer = new Layer(coverage, rasterStyle);
         
         // Set up a MapContent with the two layers
         final MapContent map = new MapContent();
