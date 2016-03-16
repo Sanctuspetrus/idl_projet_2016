@@ -13,11 +13,33 @@ import ucar.nc2.Variable;
 
 
 public class WriteNcdfFile {
+	static String location = "C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/testWrite.nc";
+	
+	public static void nCDFFileWriter(ArrayList<Point> listPoints) throws IOException {
+		NetcdfFileWriter writer = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, location, null);
+		
+		int i,j,k,l;
+		ArrayList<Double> timeTMP = new ArrayList<Double>();
+		timeTMP.add(listPoints.get(0).getTemps());
+		i = 0;
+		while(i < listPoints.size()){
+			if(timeTMP.get(timeTMP.size()-1) != listPoints.get(i).getTemps()){
+				timeTMP.add(listPoints.get(i).getTemps());
+			}
+			i++;
+		}
+		// add dimensions
+		Dimension timeDim = writer.addDimension(null, "time", 64);
+		Dimension latDim = writer.addDimension(null, "lat", 64);
+		Dimension lonDim = writer.addDimension(null, "lon", 128);
+	}
+	
+	
 	public static void main(String[] args) throws IOException {
-		String location = "C:/Users/Kajine/Downloads/testWrite.nc";
 		NetcdfFileWriter writer = NetcdfFileWriter.createNew(NetcdfFileWriter.Version.netcdf3, location, null);
 
 		// add dimensions
+		Dimension timeDim = writer.addDimension(null, "time", 64);
 		Dimension latDim = writer.addDimension(null, "lat", 64);
 		Dimension lonDim = writer.addDimension(null, "lon", 128);
 
@@ -25,7 +47,7 @@ public class WriteNcdfFile {
 		List<Dimension> dims = new ArrayList<Dimension>();
 		dims.add(latDim);
 		dims.add(lonDim);
-		Variable t = writer.addVariable(null, "temperature", DataType.DOUBLE, dims);
+		Variable t = writer.addVariable(null, "time", DataType.DOUBLE, dims);
 		t.addAttribute(new Attribute("units", "K"));   // add a 1D attribute of length 3
 		Array data = Array.factory(int.class, new int[]{3}, new int[]{1, 2, 3});
 		t.addAttribute(new Attribute("scale", data));
