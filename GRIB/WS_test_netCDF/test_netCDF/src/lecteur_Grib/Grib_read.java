@@ -4,6 +4,8 @@ import ucar.nc2.dt.grid.*;
 
 import java.io.IOException;
 
+import org.joda.time.DateTime;
+
 import ucar.ma2.Array;
 import ucar.ma2.InvalidRangeException;
 import ucar.nc2.NCdumpW;
@@ -11,10 +13,13 @@ import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 
 public class Grib_read{
-	static String filename = "C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb";
+	static String filename = "C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/20160316_100540_.grb";
 	  static NetcdfFile ncfile = null;
 	  
 	public static Array afficheValeur(){
+		
+		String var = ncfile.getDetailInfo();
+		System.out.println(var);
 		String varNameU = "u-component_of_wind_height_above_ground";
 		String varNameV = "v-component_of_wind_height_above_ground";  
 		String varNameLon = "lon"; 
@@ -31,16 +36,25 @@ public class Grib_read{
 		 Array dataV = null;
 		 Array dataLon = null;
 		 Array dataLat = null;
-		 Array dataTime = null;
+		 Array dataTemps = null;
 		 Array dataPrec = null;
 		  if (null == v) return null;
 		 try {
-		 dataU = u.read("0:4:1, 0:0:1, 0:30:1, 0:70:1");
-		 dataU = v.read("0:4:1, 0:0:1, 0:30:1, 0:70:1");
-		 dataU = lon.read();
-		 dataU = lat.read();
-		 dataU = time.read();
-		 dataU = prec.read("0:4:1, 0:0:1, 0:30:1, 0:70:1");
+		 dataLon = lon.read("0:216:1");
+		 dataLat = lat.read("0:100:1");
+		 dataTemps = time.read();
+		 for(int i = 0; i < dataTemps.getSize(); i++){
+			 for (int j = 0; j < dataLat.getSize(); j++){
+				 for (int k = 0; k < dataLon.getSize(); k++){
+					 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k	+":1");
+					 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k	+":1");
+					 dataV = v.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k	+":1");
+					 System.out.println("temps : "+dataTemps.getDouble(i)+"longitude : "+dataLon.getFloat(k)+"Latitude : "+dataLat.getFloat(j)+"pression : "+dataPrec.getFloat(0)+"U : "+dataU.getFloat(0)+"V : "+dataV.getFloat(0));
+				 }
+			 }
+		 }
+		 
+		 
 		 } catch (IOException ioe) {
 			 System.out.println("trying to open " + varNameU+" "+ioe);
 
