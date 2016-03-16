@@ -1,0 +1,137 @@
+<?xml version="1.0" ?>
+<GISLayerConfiguration>
+	<!-- A textual description of this configuration -->
+<!--
+	<description></description>
+-->
+
+	<!--
+		A CodeList is used to specify Name-Value-Pairs to be used in database tables.
+		These Name-Value-Pairs are stored in 1 table, the lookup table, and then the
+		codes are stored in other tables. Applications can then replace the code with
+		the value to present to humans.
+		
+		The CodeList element must have name, type and length attributes.
+		The name is used to create the lookup table.
+		The type and length represent the code, not the value. This allows
+		tables that are to be used with the CodeList to be validated.
+
+		A value element represents 1 Name-Value-Pair.
+		The code attribute is used to reference the value in other tables.
+	-->
+<!--
+	<CodeList name="" type="" length="">
+		<value code=""></value>
+	</CodeList>
+-->
+
+	<!--
+		An Attribute element is used to provide information about one column of data
+		in the Shapefile.
+		
+		The column attribute is the raw name of the column and must match exactly for 
+		the metadata to be associated with it.
+		The readable-name attribute can be used to specify a nice name for display.
+
+		The Value element is used to specify metadata about the data type itself.
+			
+		The data-type attribute specifies the actual raw data type as specified in
+		the Shapefile.
+		The length attribute must also match that specified in the Shapefile.
+		These attributes allow the validation of metadata before it is applied to
+		a particular layer.
+
+		The field-type element is used to apply an abstract data type to
+		a column of data. This allows iGIS to present custom forms and choices
+		to the user which helps make data entry more efficient.
+
+		The field-param element can be used when the field-type requires more information
+		than just a name. For example, when the field-type is CodeList, the field-param 
+		must contain the name of the CodeList to use.
+
+		The default element can be used to specify a value that is inserted by default.
+		This value can be altered by the user when creating a feature, if required.
+
+		The prompt element can be used to set a string to be presented to the user
+		to help explain what they must enter for a particular value. This string should
+		be fairly short though, as there is not much room to present much information.
+
+		The Visibility element is a container for elements that determine when iGIS will
+		display a column.
+
+		The edit element specifies whether iGIS should display this column when editting
+		and creating features.
+
+		The list element specifies whether iGIS should display this column when viewing
+		features such as an identify operation.
+	-->
+
+	<Attribute column="Id" readable-name="Id">
+	
+		<Value data-type="N" length="6">
+			<field-type>Integer</field-type>
+<!--
+			<field-param></field-param>
+			<default></default>
+			<prompt></prompt>
+-->
+		</Value>
+		
+		<Visibility>
+			<list>true</list>
+			<edit>true</edit>
+		</Visibility>
+	</Attribute>
+
+	<Attribute column="name" readable-name="Name">
+	
+		<Value data-type="C" length="254">
+			<field-type>String</field-type>
+<!--
+			<field-param></field-param>
+			<default></default>
+			<prompt></prompt>
+-->
+		</Value>
+		
+		<Visibility>
+			<list>true</list>
+			<edit>true</edit>
+		</Visibility>
+	</Attribute>
+
+	<Attribute column="comment" readable-name="Comment">
+	
+		<Value data-type="C" length="254">
+			<field-type>String</field-type>
+<!--
+			<field-param></field-param>
+			<default></default>
+			<prompt></prompt>
+-->
+		</Value>
+		
+		<Visibility>
+			<list>true</list>
+			<edit>true</edit>
+		</Visibility>
+	</Attribute>
+
+	<Attribute column="timestamp_" readable-name="Timestamp">
+	
+		<Value data-type="C" length="25">
+			<field-type>Date</field-type>
+
+			<field-param></field-param>
+			<default>current</default>
+			<prompt></prompt>
+
+		</Value>
+		
+		<Visibility>
+			<list>true</list>
+			<edit>true</edit>
+		</Visibility>
+	</Attribute>
+
+</GISLayerConfiguration>
