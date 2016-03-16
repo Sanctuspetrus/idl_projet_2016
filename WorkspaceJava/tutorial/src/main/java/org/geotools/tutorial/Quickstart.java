@@ -16,6 +16,7 @@ import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.map.FeatureLayer;
+import org.geotools.map.GridCoverageLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
 import org.geotools.styling.ChannelSelection;
@@ -106,6 +107,10 @@ public class Quickstart {
 		File file = new File("cartes/countries.shp");
 		File file2 = new File("cartes/timezone.shp");
 		File barb = new File("cartes/barbulle.jpg");
+		 // Set up a MapContent with the two layers
+        MapContent map = new MapContent();
+        map.setTitle("ImageLab");
+        map.getCoordinateReferenceSystem();
         
         // Connect to the shapefile
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(file);
@@ -126,18 +131,15 @@ public class Quickstart {
         AbstractGridFormat format = GridFormatFinder.findFormat( barb );
         reader = format.getReader(barb);
         GridCoverage2D coverage = reader.read(null);
-        CoordinateReferenceSystem crs = coverage.getCoordinateReferenceSystem2D();
-        // direct access
-        DirectPosition position = new DirectPosition2D(crs, 24, 35);
-        coverage.evaluate( position ); // assume double
+        
+       
         // Initially display the raster in greyscale using the
         // data from the first image band
         Style rasterStyle = createGreyscaleStyle(1);
-        Layer rasterLayer = new Layer(coverage, rasterStyle);
+        Layer rasterLayer = new GridCoverageLayer(coverage, rasterStyle);
         
-        // Set up a MapContent with the two layers
-        MapContent map = new MapContent();
-        map.setTitle("ImageLab");
+        
+        map.addLayer(rasterLayer);
         
         map.addLayer(shpLayer);
         map.addLayer(shpLayer2);
