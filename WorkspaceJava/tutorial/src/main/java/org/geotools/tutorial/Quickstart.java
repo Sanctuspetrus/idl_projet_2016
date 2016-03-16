@@ -136,9 +136,9 @@ public class Quickstart {
         Layer rasterLayer = new Layer(coverage, rasterStyle);
         
         // Set up a MapContent with the two layers
-        final MapContent map = new MapContent();
+        MapContent map = new MapContent();
         map.setTitle("ImageLab");
-        map.addLayer(rasterLayer);
+        
         map.addLayer(shpLayer);
         map.addLayer(shpLayer2);
 
