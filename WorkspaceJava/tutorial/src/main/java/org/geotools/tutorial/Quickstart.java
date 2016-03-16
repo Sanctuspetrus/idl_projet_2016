@@ -1,6 +1,7 @@
 package org.geotools.tutorial;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,11 +15,14 @@ import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.geometry.DirectPosition2D;
+import org.geotools.feature.DefaultFeatureCollection;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
+import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.map.FeatureLayer;
-import org.geotools.map.GridCoverageLayer;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.styling.ChannelSelection;
 import org.geotools.styling.ContrastEnhancement;
 import org.geotools.styling.RasterSymbolizer;
@@ -27,10 +31,14 @@ import org.geotools.styling.SelectedChannelType;
 import org.geotools.styling.Style;
 import org.geotools.styling.StyleFactory;
 import org.geotools.swing.JMapFrame;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.FilterFactory2;
-import org.opengis.geometry.DirectPosition;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.style.ContrastMethod;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 
 /**
  * Prompts the user for a shapefile and displays the contents on the screen in a map frame.
@@ -110,7 +118,6 @@ public class Quickstart {
 		 // Set up a MapContent with the two layers
         MapContent map = new MapContent();
         map.setTitle("ImageLab");
-        map.getCoordinateReferenceSystem();
         
         // Connect to the shapefile
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(file);
@@ -131,19 +138,39 @@ public class Quickstart {
         AbstractGridFormat format = GridFormatFinder.findFormat( barb );
         reader = format.getReader(barb);
         GridCoverage2D coverage = reader.read(null);
+
+
+        SimpleFeatureTypeBuilder b = new SimpleFeatureTypeBuilder();
+        //set the name
+        b.setName( "MyFeatureType" );
+        //add a geometry property
+        b.setCRS( DefaultGeographicCRS.WGS84 ); // set crs first
+        b.add( "location", Point.class ); // then add geometry
+        //build the type
+        final SimpleFeatureType TYPE = b.buildFeatureType();
+        SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
+        GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
+        Point point = geometryFactory.createPoint(new Coordinate(23, 35));
         
+        featureBuilder.add(point);
+        SimpleFeature feature = featureBuilder.buildFeature( "fid.1" ); // build the 1st feature
+
+        DefaultFeatureCollection featureCollection = new DefaultFeatureCollection("internal",TYPE);
+        featureCollection.add(feature); //Add feature 1
        
+
+
         // Initially display the raster in greyscale using the
         // data from the first image band
         Style rasterStyle = createGreyscaleStyle(1);
-        Layer rasterLayer = new GridCoverageLayer(coverage, rasterStyle);
+        Layer rasterLayer = new FeatureLayer(featureCollection, rasterStyle);
         
         
-        map.addLayer(rasterLayer);
+        
         
         map.addLayer(shpLayer);
-        map.addLayer(shpLayer2);
-
+        //map.addLayer(shpLayer2);
+        map.addLayer(rasterLayer);
 		// Now display the map
 		JMapFrame.showMap(map);
 	}
