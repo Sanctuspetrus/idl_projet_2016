@@ -1,19 +1,19 @@
 package org.geotools.tutorial;
 
 import java.awt.Color;
-import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
 import org.geotools.coverage.grid.GridCoverage2D;
-import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridCoverage2DReader;
-import org.geotools.coverage.grid.io.GridFormatFinder;
+import org.geotools.data.DefaultTransaction;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
+import org.geotools.data.Transaction;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -38,6 +38,7 @@ import org.opengis.style.ContrastMethod;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
 
 /**
@@ -113,7 +114,7 @@ public class Quickstart {
 	public static void main(String[] args) throws Exception {
 		// display a data store file chooser dialog for shapefiles
 		File file = new File("cartes/countries.shp");
-		File file2 = new File("cartes/timezone.shp");
+		File file2 = new File("cartes/line_shapefile.shp");
 		File barb = new File("cartes/barbulle.jpg");
 		 // Set up a MapContent with the two layers
         MapContent map = new MapContent();
@@ -133,44 +134,41 @@ public class Quickstart {
     	// Create a basic style with yellow lines and no fill
         Style shpStyle2 = SLD.createPolygonStyle(Color.black, null, 0.0f);
         Layer shpLayer2 = new FeatureLayer(shapefileSource2, shpStyle2);
-       
         
-        AbstractGridFormat format = GridFormatFinder.findFormat( barb );
-        reader = format.getReader(barb);
-        GridCoverage2D coverage = reader.read(null);
-
-
+        
         SimpleFeatureTypeBuilder b = new SimpleFeatureTypeBuilder();
         //set the name
         b.setName( "MyFeatureType" );
         //add a geometry property
         b.setCRS( DefaultGeographicCRS.WGS84 ); // set crs first
-        b.add( "location", Point.class ); // then add geometry
+        b.add( "location", LineString.class ); // then add geometry
         //build the type
         final SimpleFeatureType TYPE = b.buildFeatureType();
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
-        GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-        Point point = geometryFactory.createPoint(new Coordinate(23, 35));
-        Rectangle rec = new Rectangle(point);
-        featureBuilder.add(point);
-        SimpleFeature feature = featureBuilder.buildFeature( "fid.1" ); // build the 1st feature
+        GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory(); 
+        Coordinate[] coords  =
+        		new Coordinate[] {new Coordinate(-40, 27), new Coordinate(-40, 60), new Coordinate(0, 60) };
 
+        LineString line = geometryFactory.createLineString(coords);
+        featureBuilder.add(line);
+        SimpleFeature feature = featureBuilder.buildFeature( "fid.1" ); // build the 1st feature
         DefaultFeatureCollection featureCollection = new DefaultFeatureCollection("internal",TYPE);
         featureCollection.add(feature); //Add feature 1
-       
+        SimpleFeatureSource source = (SimpleFeatureSource) shpLayer.getFeatureSource();
+        if( source instanceof SimpleFeatureStore){
+        	System.out.println("ON PEUT MODIFIER LE FICHIER");
+        	SimpleFeatureStore store = (SimpleFeatureStore) source; // write access!
+        	Transaction transaction = new DefaultTransaction("Add LINE");
+        	store.setTransaction( transaction );
+        	store.addFeatures( featureCollection );
+        	transaction.commit();
+
+        }
 
 
-        // Initially display the raster in greyscale using the
-        // data from the first image band
-        Style rasterStyle = createGreyscaleStyle(1);
-        Layer rasterLayer = new FeatureLayer(featureCollection, rasterStyle);
-        
-        
-        
-        
+
         map.addLayer(shpLayer);
-        //map.addLayer(shpLayer2);
-        map.addLayer(rasterLayer);
+        map.addLayer(shpLayer2);
 		// Now display the map
 		JMapFrame.showMap(map);
 	}
