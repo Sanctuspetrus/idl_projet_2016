@@ -151,7 +151,7 @@ public class Quickstart {
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
         GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
         Point point = geometryFactory.createPoint(new Coordinate(23, 35));
-        Rectangle rec = new Rectangle(point);
+        
         featureBuilder.add(point);
         SimpleFeature feature = featureBuilder.buildFeature( "fid.1" ); // build the 1st feature
 
