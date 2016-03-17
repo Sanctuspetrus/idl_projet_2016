@@ -14,10 +14,15 @@ import ucar.nc2.NetcdfFile;
 import ucar.nc2.Variable;
 
 public class Grib_read{
-	static String filename = "C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb";
-	  static NetcdfFile ncfile = null;
+	  NetcdfFile ncfile = null;
 	  
-	public static ArrayList<Point> afficheValeur(){
+	public ArrayList<Point> lectureFile(String filename){
+		try {
+		    ncfile = NetcdfFile.open(filename);
+		  } catch (IOException ioe) {
+		    System.out.println("trying to open " + filename+" "+ioe);
+		  }
+		
 		ArrayList<Point> listPoints = new ArrayList<Point>();
 		String varNameU = "u-component_of_wind_height_above_ground";
 		String varNameV = "v-component_of_wind_height_above_ground";  
@@ -54,9 +59,9 @@ public class Grib_read{
 					 tmp.setTemps(dataTemps.getDouble(i));
 					 tmp.setLongitude(dataLon.getFloat(k));
 					 tmp.setLatitude(dataLat.getFloat(j));
-					 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k	+":1");
-					 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k	+":1");
-					 dataV = v.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k	+":1");
+					 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k+":1");
+					 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
+					 dataV = v.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
 					 tmp.setPression(dataPrec.getFloat(0));
 					 tmp.setVentU(dataU.getFloat(0));
 					 tmp.setVentV(dataV.getFloat(0));
@@ -65,6 +70,8 @@ public class Grib_read{
 				 }
 			 }
 		 }
+
+	      ncfile.close();
 		 
 		 
 		 } catch (IOException ioe) {
@@ -77,18 +84,8 @@ public class Grib_read{
 	}
 
 	public static void main(String args[]){
-		  try {
-		    ncfile = NetcdfFile.open(filename);
-		  } catch (IOException ioe) {
-		    System.out.println("trying to open " + filename+" "+ioe);
-		  } finally { 
-		    if (null != ncfile) try {
-		    	ArrayList<Point> listPoints = afficheValeur();
-		    	System.out.println(listPoints);
-		      ncfile.close();
-		    } catch (IOException ioe) {
-		    	System.out.println("trying to open " + filename+" "+ioe);
-		    }
-		  }
+		Grib_read grib = new Grib_read();
+		ArrayList<Point> listPoints = grib.lectureFile("C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb");
+		System.out.println("coucou");
 	}
 }
