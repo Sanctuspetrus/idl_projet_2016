@@ -30,6 +30,7 @@ public class Grib_read{
 		String varNameLat = "lat"; 
 		String varNameTime = "time"; 
 		String varNamePrec = "Pressure_reduced_to_MSL_msl"; 
+		//ncfile.findVariable("refTime")
 		 Variable u = ncfile.findVariable(varNameU);
 		 Variable v = ncfile.findVariable(varNameV);
 		 Variable lon = ncfile.findVariable(varNameLon);
@@ -53,6 +54,7 @@ public class Grib_read{
 		 dataLat = lat.read();
 		 dataTemps = time.read();
 		 for(int i = 0; i < dataTemps.getSize(); i++){
+					// System.out.println(dataTemps.getDouble(i));
 			 for (int j = 0; j < dataLat.getSize(); j++){
 				 for (int k = 0; k < dataLon.getSize(); k++){
 					 Point tmp = new Point();
@@ -62,7 +64,8 @@ public class Grib_read{
 							 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k+":1");
 							 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
 							 dataV = v.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
-							 System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
+							 System.out.println(dataV.getSize());
+							 //System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
 						 }
 					 }
 					 /*tmp.setLongitude(dataLon.getFloat(k));
@@ -73,7 +76,7 @@ public class Grib_read{
 					 tmp.setPression(dataPrec.getFloat(0));
 					 tmp.setVentU(dataU.getFloat(0));
 					 tmp.setVentV(dataV.getFloat(0));
-					 //System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
+					 System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
 					 listPoints.add(tmp);*/
 				 }
 			 }
@@ -93,7 +96,7 @@ public class Grib_read{
 
 	public static void main(String args[]){
 		Grib_read grib = new Grib_read();
-		ArrayList<Point> listPoints = grib.lectureFile("C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb", -40.0f, 20.0f );
-		System.out.println("coucou");
+		ArrayList<Point> listPoints = grib.lectureFile("C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb", 30.0f, 50.0f );
+		//System.out.println("coucou");
 	}
 }
