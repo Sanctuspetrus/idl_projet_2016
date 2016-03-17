@@ -16,7 +16,7 @@ import ucar.nc2.Variable;
 public class Grib_read{
 	  NetcdfFile ncfile = null;
 	  
-	public ArrayList<Point> lectureFile(String filename){
+	public ArrayList<Point> lectureFile(String filename, Float longitude, Float latitude){
 		try {
 		    ncfile = NetcdfFile.open(filename);
 		  } catch (IOException ioe) {
@@ -57,7 +57,15 @@ public class Grib_read{
 				 for (int k = 0; k < dataLon.getSize(); k++){
 					 Point tmp = new Point();
 					 tmp.setTemps(dataTemps.getDouble(i));
-					 tmp.setLongitude(dataLon.getFloat(k));
+					 if(longitude.equals( dataLon.getFloat(k))){
+						 if(latitude.equals( dataLat.getFloat(j))){
+							 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k+":1");
+							 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
+							 dataV = v.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
+							 System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
+						 }
+					 }
+					 /*tmp.setLongitude(dataLon.getFloat(k));
 					 tmp.setLatitude(dataLat.getFloat(j));
 					 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k+":1");
 					 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
@@ -66,7 +74,7 @@ public class Grib_read{
 					 tmp.setVentU(dataU.getFloat(0));
 					 tmp.setVentV(dataV.getFloat(0));
 					 //System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
-					 listPoints.add(tmp);
+					 listPoints.add(tmp);*/
 				 }
 			 }
 		 }
@@ -85,7 +93,7 @@ public class Grib_read{
 
 	public static void main(String args[]){
 		Grib_read grib = new Grib_read();
-		ArrayList<Point> listPoints = grib.lectureFile("C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb");
+		ArrayList<Point> listPoints = grib.lectureFile("C:/Users/Loïck/Documents/Projet ILD/base_Projet/Dossier Previsions/grib20160315060801331.grb", -40.0f, 20.0f );
 		System.out.println("coucou");
 	}
 }
