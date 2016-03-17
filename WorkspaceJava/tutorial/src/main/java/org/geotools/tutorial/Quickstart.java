@@ -25,6 +25,7 @@ import org.geotools.map.MapContent;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.styling.ChannelSelection;
 import org.geotools.styling.ContrastEnhancement;
+import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.RasterSymbolizer;
 import org.geotools.styling.SLD;
 import org.geotools.styling.SelectedChannelType;
@@ -124,51 +125,58 @@ public class Quickstart {
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(file);
         SimpleFeatureSource shapefileSource = dataStore.getFeatureSource();
     	// Create a basic style with yellow lines and no fill
-        Style shpStyle = SLD.createPolygonStyle(Color.red, null, 0.0f);
-        Layer shpLayer = new FeatureLayer(shapefileSource, shpStyle);
+       
 
         
         // Connect to the shapefile
         FileDataStore dataStore2 = FileDataStoreFinder.getDataStore(file2);
         SimpleFeatureSource shapefileSource2 = dataStore2.getFeatureSource();
     	// Create a basic style with yellow lines and no fill
-        Style shpStyle2 = SLD.createPolygonStyle(Color.black, null, 0.0f);
+        Style shpStyle2 = SLD.createPolygonStyle(Color.red, null, 0.0f);
         Layer shpLayer2 = new FeatureLayer(shapefileSource2, shpStyle2);
+
+      
         
         
         SimpleFeatureTypeBuilder b = new SimpleFeatureTypeBuilder();
         //set the name
-        b.setName( "MyFeatureType" );
+        b.setName( "Location" );
         //add a geometry property
         b.setCRS( DefaultGeographicCRS.WGS84 ); // set crs first
-        b.add( "location", LineString.class ); // then add geometry
+        b.add( "route", LineString.class ); // then add geometry
+        
         //build the type
         final SimpleFeatureType TYPE = b.buildFeatureType();
         SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
         GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory(); 
         Coordinate[] coords  =
-        		new Coordinate[] {new Coordinate(-40, 27), new Coordinate(-40, 60), new Coordinate(0, 60) };
+        		new Coordinate[] {new Coordinate(0, 45), new Coordinate(0, 46), new Coordinate(1, 46) };
 
         LineString line = geometryFactory.createLineString(coords);
         featureBuilder.add(line);
         SimpleFeature feature = featureBuilder.buildFeature( "fid.1" ); // build the 1st feature
         DefaultFeatureCollection featureCollection = new DefaultFeatureCollection("internal",TYPE);
         featureCollection.add(feature); //Add feature 1
-        SimpleFeatureSource source = (SimpleFeatureSource) shpLayer.getFeatureSource();
-        if( source instanceof SimpleFeatureStore){
+        if( shapefileSource instanceof SimpleFeatureStore){
         	System.out.println("ON PEUT MODIFIER LE FICHIER");
-        	SimpleFeatureStore store = (SimpleFeatureStore) source; // write access!
+        	SimpleFeatureStore store = (SimpleFeatureStore) shapefileSource2; // write access!
         	Transaction transaction = new DefaultTransaction("Add LINE");
         	store.setTransaction( transaction );
         	store.addFeatures( featureCollection );
         	transaction.commit();
+        	transaction.close();
+        	
 
         }
-
-
+        Style shpStyle = SLD.createPolygonStyle(Color.red, null, 0.0f);
+        Style lineStyle = SLD.createLineStyle(Color.black, 1);
+        FeatureTypeStyle featureTypeStyle = sf.createFeatureTypeStyle();
+        shpStyle.featureTypeStyles().add(featureTypeStyle);
+        Layer shpLayer = new FeatureLayer(shapefileSource, shpStyle);
+        
 
         map.addLayer(shpLayer);
-        map.addLayer(shpLayer2);
+        //map.addLayer(shpLayer2);
 		// Now display the map
 		JMapFrame.showMap(map);
 	}
