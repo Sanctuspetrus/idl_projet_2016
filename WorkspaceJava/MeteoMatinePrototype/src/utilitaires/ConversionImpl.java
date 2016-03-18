@@ -1,4 +1,4 @@
-package testUtilitaire;
+package utilitaires;
 
 public class ConversionImpl {
 	

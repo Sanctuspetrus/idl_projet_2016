@@ -1,10 +1,10 @@
-package testUtilitaire;
+package utilitaires;
 
 public class InterpolationImpl {
 
-	public static Vent interpolationLon(Vent A,Vent B, float lon){
+	/*public static Vent interpolationLon(Vent A,Vent B, float lon){
 		B.getU()-A.getU()*lon-A.getU();
 		
-	}
+	}*/
 	
 }
