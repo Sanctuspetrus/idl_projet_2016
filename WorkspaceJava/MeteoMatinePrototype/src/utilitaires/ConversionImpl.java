@@ -8,7 +8,7 @@ public class ConversionImpl {
 	}
 	
 	public static float getAngleFromUV(float u, float v){
-		return (float) Math.toDegrees(Math.atan2(v, u));
+		return (float) Math.toDegrees(Math.atan2(u,v));
 		
 	}
 	
