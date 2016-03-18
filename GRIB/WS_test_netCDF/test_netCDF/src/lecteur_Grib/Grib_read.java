@@ -64,8 +64,8 @@ public class Grib_read{
 							 dataPrec = prec.read(i+":"+i+":1, "+j+":"+j+":1, "+k+":"+k+":1");
 							 dataU = u.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
 							 dataV = v.read(i+":"+i+":1, 0:0:1, "+j+":"+j+":1, "+k+":"+k+":1");
-							 System.out.println(dataV.getSize());
-							 //System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
+							 
+							 System.out.println("temps : "+dataTemps.getDouble(i)+" longitude : "+dataLon.getFloat(k)+" Latitude : "+dataLat.getFloat(j)+" pression : "+dataPrec.getFloat(0)+" U : "+dataU.getFloat(0)+" V : "+dataV.getFloat(0));
 						 }
 					 }
 					 /*tmp.setLongitude(dataLon.getFloat(k));
