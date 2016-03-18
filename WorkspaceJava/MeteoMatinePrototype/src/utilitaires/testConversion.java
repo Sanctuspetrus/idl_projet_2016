@@ -1,6 +1,6 @@
 package utilitaires;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +26,16 @@ public class testConversion {
 	@Test
 	public void testgetAngleFromUV() {
 		assertTrue((float)Math.toDegrees(Math.atan2(-4, 3))==ConversionImpl.getAngleFromUV(u,v));
+	}
+	
+	@Test
+	public void testmsToNoeud(float v){
+		assertTrue(1.94384f == ConversionImpl.msToNoeud(1));
+	}
+	
+	@Test
+	public void testnoeudToMS(float v){
+		assertTrue(1 == ConversionImpl.msToNoeud(1.94384f));
 	}
 
 }
