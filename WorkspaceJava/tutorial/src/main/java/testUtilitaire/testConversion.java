@@ -8,13 +8,13 @@ import org.junit.Test;
 
 public class testConversion {
 	
-	double u;
-	double v;
+	float u;
+	float v;
 
 	@Before
 	public void setUp() throws Exception {
-		u=3.0;
-		v=-4.0;
+		u=3;
+		v=-4;
 	}
 
 	@Test
@@ -25,7 +25,7 @@ public class testConversion {
 	
 	@Test
 	public void testgetAngleFromUV() {
-		assertTrue(Math.toDegrees(Math.atan2(-4, 3))==ConversionImpl.getAngleFromUV(u,v));
+		assertTrue((float)Math.toDegrees(Math.atan2(-4, 3))==ConversionImpl.getAngleFromUV(u,v));
 	}
 
 }
