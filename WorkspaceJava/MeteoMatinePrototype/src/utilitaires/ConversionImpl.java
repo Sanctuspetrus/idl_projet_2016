@@ -12,5 +12,13 @@ public class ConversionImpl {
 		
 	}
 	
+	public static float msToNoeud(float v){
+		return v*(1.94384f);
+	}
+	
+	public static float noeudToMS(float v){
+		return v/(1.94384f);
+	}
+	
 
 }

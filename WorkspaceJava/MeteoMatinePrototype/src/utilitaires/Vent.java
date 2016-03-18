@@ -2,15 +2,35 @@ package utilitaires;
 
 public class Vent {
 
+	float dNord;
+	float dEst;
 	float u;
 	float v;
 	float pression;
 	
-	public Vent(float u, float v, float pression) {
+	public Vent(float dNord, float dEst, float u, float v, float pression) {
 		super();
+		this.dNord = dNord;
+		this.dEst = dEst;
 		this.u = u;
 		this.v = v;
 		this.pression = pression;
+	}
+
+	public float getdNord() {
+		return dNord;
+	}
+
+	public void setdNord(float dNord) {
+		this.dNord = dNord;
+	}
+
+	public float getdEst() {
+		return dEst;
+	}
+
+	public void setdEst(float dEst) {
+		this.dEst = dEst;
 	}
 
 	public float getU() {

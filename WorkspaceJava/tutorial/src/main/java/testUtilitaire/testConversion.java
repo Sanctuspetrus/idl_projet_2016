@@ -27,5 +27,7 @@ public class testConversion {
 	public void testgetAngleFromUV() {
 		assertTrue((float)Math.toDegrees(Math.atan2(3, -4))==ConversionImpl.getAngleFromUV(u,v));
 	}
+	
+	
 
 }

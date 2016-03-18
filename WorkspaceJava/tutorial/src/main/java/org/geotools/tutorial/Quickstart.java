@@ -125,7 +125,8 @@ public class Quickstart {
         FileDataStore dataStore = FileDataStoreFinder.getDataStore(file);
         SimpleFeatureSource shapefileSource = dataStore.getFeatureSource();
     	// Create a basic style with yellow lines and no fill
-       
+        Style shpStyle = SLD.createPolygonStyle(Color.black, null, 0.0f);
+        Layer shpLayer = new FeatureLayer(shapefileSource, shpStyle);
 
         
         // Connect to the shapefile
@@ -137,7 +138,7 @@ public class Quickstart {
 
       
         
-        
+      /*  
         SimpleFeatureTypeBuilder b = new SimpleFeatureTypeBuilder();
         //set the name
         b.setName( "Location" );
@@ -173,7 +174,7 @@ public class Quickstart {
         FeatureTypeStyle featureTypeStyle = sf.createFeatureTypeStyle();
         shpStyle.featureTypeStyles().add(featureTypeStyle);
         Layer shpLayer = new FeatureLayer(shapefileSource, shpStyle);
-        
+        */
 
         map.addLayer(shpLayer);
         //map.addLayer(shpLayer2);
